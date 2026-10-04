@@ -1,0 +1,5 @@
+{
+  "name": "finder",
+  "scripts": { "start": "node Finder.js" },
+  "engines": { "node": ">=18" }
+}
