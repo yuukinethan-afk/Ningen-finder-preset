@@ -8,6 +8,7 @@ const MAX_REPLY = 40;     // buka balasan maksimal 40 komentar
 const GAP = 1100;         // jeda minimal antar request (batas gratis tikwm)
 
 const sleep = ms => new Promise(r => setTimeout(r, ms));
+const abs = p => p ? (/^https?:/i.test(p) ? p : 'https://www.tikwm.com' + p) : '';
 let last = 0;
 
 async function tw(endpoint, params) {
@@ -141,7 +142,7 @@ async function run(url, emit, early) {
   const id = await idP;
   const firstP = id ? ttGet(TT, { aweme_id: id, cursor: 0 }) : Promise.resolve(null);
   const [info, first] = await Promise.all([infoP, firstP]);
-  wrap({ type: 'info', id: id || info.id || '', caption: info.title || '', account: '@' + (info.author && info.author.unique_id || ''),
+  wrap({ type: 'info', id: id || info.id || '', video: abs(info.play || info.hdplay), cover: abs(info.cover || info.origin_cover), caption: info.title || '', account: '@' + (info.author && info.author.unique_id || ''),
          views: fmt(info.play_count), likes: fmt(info.digg_count), comments: info.comment_count });
   if (first && Array.isArray(first.comments) && first.comments.length) return runDirect(id, info, first, wrap);
   return runTikwm(info, wrap, stop);
