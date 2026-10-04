@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Preset Finder</title>
+<style>
+:root{--bg:#0d0f10;--card:#16191b;--line:#2a2f32;--tx:#f2f5f4;--mut:#8b9593;--ac:#00f5a0;--acx:#04281c;--acd:#0b3a2a;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:light){:root:not([data-theme="dark"]){--bg:#f4f7f6;--card:#fff;--line:#d6dcda;--tx:#111514;--mut:#5d6866;--ac:#00b373;--acx:#fff;--acd:#d9f5ea}}
+:root[data-theme="light"]{--bg:#f4f7f6;--card:#fff;--line:#d6dcda;--tx:#111514;--mut:#5d6866;--ac:#00b373;--acx:#fff;--acd:#d9f5ea}
+*{box-sizing:border-box}html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--tx);font:16px/1.5 system-ui,sans-serif}
+main{max-width:520px;margin:0 auto;padding:20px 16px 48px}
+h1{font-size:26px;margin:4px 0;letter-spacing:-.02em}
+p.sub{color:var(--mut);margin:0 0 18px;font-size:14px}
+.box{display:flex;gap:8px;align-items:center;border:2px solid var(--ac);border-radius:16px;padding:6px 6px 6px 14px;background:var(--card)}
+.box input{flex:1;min-width:0;background:none;border:0;color:var(--tx);font:inherit;outline:0;padding:10px 0}
+.x{background:none;border:0;color:var(--mut);font-size:22px;padding:6px 10px;cursor:pointer}
+.btn{background:var(--ac);color:var(--acx);border:0;border-radius:12px;font:700 16px inherit;font-family:inherit;padding:12px 24px;cursor:pointer;text-decoration:none;display:inline-block}
+.btn.s{background:none;color:var(--tx);border:1px solid var(--line);font-weight:500}
+.btn:active{transform:translateY(1px)}
+.btn:focus-visible,.x:focus-visible{outline:3px solid var(--ac);outline-offset:2px}
+.go{margin-top:12px;border-bottom:4px solid rgba(0,0,0,.25)}
+.err{color:#ff6b6b;font-size:14px;margin-top:10px}
+.chip{display:block;margin:14px 0;border:1px solid var(--line);border-radius:999px;padding:8px 16px;color:var(--mut);font-size:14px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.vid{aspect-ratio:9/16;max-width:260px;margin:6px auto 16px;border:1px solid var(--line);border-radius:14px;background:linear-gradient(160deg,#2b2118,#0d0f10);display:grid;place-items:center;color:#9a948c;font-size:13px;text-align:center;padding:16px}
+.cap{margin:0 0 18px;word-break:break-word}.cap .h{color:var(--mut)}
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:18px 12px;margin-bottom:26px}
+.stats small{display:block;color:var(--mut);font-size:13px;letter-spacing:.06em;margin-bottom:2px}
+.stats b{font-size:22px}
+.ph{display:flex;align-items:center;gap:12px;margin:8px 0 14px;padding-bottom:12px;border-bottom:1px solid var(--line)}
+.ph i{display:block;width:72px;height:5px;border-radius:3px;background:var(--ac)}
+.ph h2{font-size:22px;margin:0}
+.cnt{border:1px solid var(--ac);background:var(--acd);color:var(--ac);border-radius:10px;padding:2px 14px;font-weight:700}
+.pc{display:flex;gap:14px;background:var(--card);border:1px solid var(--line);border-radius:18px;padding:14px;margin-bottom:14px}
+.th{flex:0 0 84px;height:84px;border-radius:12px;background:var(--bg);border:1px solid var(--line);display:grid;place-items:center;font-weight:700;font-size:14px;position:relative}
+.th:before,.th:after{content:"";position:absolute;width:16px;height:16px;border:2px solid var(--ac)}
+.th:before{top:10px;left:10px;border-right:0;border-bottom:0}.th:after{bottom:10px;right:10px;border-left:0;border-top:0}
+.pb{min-width:0;flex:1}
+.pb h3{margin:0 0 6px;font-size:18px;word-break:break-word}
+.bd{display:inline-block;border:1px solid var(--ac);background:var(--acd);color:var(--ac);border-radius:8px;padding:1px 10px;font-weight:700;font-size:13px;margin-bottom:6px}
+.bd.g{border-color:var(--line);background:none;color:var(--mut);margin-left:6px}
+.by{color:var(--mut);font-size:14px}
+.url{font:13px/1.4 ui-monospace,monospace;color:var(--mut);word-break:break-all;margin:6px 0 12px}
+.acts{display:flex;gap:8px;flex-wrap:wrap}
+.acts .btn{padding:9px 14px;font-size:14px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px;margin-bottom:22px}
+.card label{display:block;font-size:14px;font-weight:600;margin:0 0 6px}
+textarea{width:100%;min-height:70px;background:var(--bg);color:var(--tx);border:1px solid var(--line);border-radius:10px;font:inherit;font-size:14px;padding:10px;resize:vertical;margin-bottom:10px}
+.note,.empty{color:var(--mut);font-size:13px}
+.empty{border:1px dashed var(--line);border-radius:14px;padding:16px}
+[hidden]{display:none}
+</style>
+</head>
+<body>
+<main>
+<h1>Preset Finder</h1>
+<p class="sub">Tempel link TikTok edit, temukan link preset dari caption dan komentar.</p>
+
+<div class="box">
+<input id="url" type="url" inputmode="url" placeholder="https://vt.tiktok.com/..." autocomplete="off" aria-label="Link TikTok">
+<button class="x" id="clr" aria-label="Hapus">×</button>
+</div>
+<button class="btn go" id="go">Search</button>
+<button class="btn s go" id="demo" style="margin-left:6px">Lihat contoh</button>
+<div class="err" id="err" hidden></div>
+
+<div id="res" hidden>
+<span class="chip" id="chip"></span>
+<div class="vid">Pratinjau video tampil di sini setelah backend tersambung</div>
+<p class="cap" id="cap"></p>
+<div class="stats">
+<div><small>ACCOUNT</small><b id="acc">-</b></div>
+<div><small>COMMENTS</small><b id="com">-</b></div>
+<div><small>VIEWS</small><b id="vw">-</b></div>
+<div><small>LIKES</small><b id="lk">-</b></div>
+</div>
+
+<div class="card" id="manual">
+<label for="cin">Caption</label>
+<textarea id="cin" placeholder="Tempel caption video"></textarea>
+<label for="min">Komentar (satu per baris, format: username: isi komentar)</label>
+<textarea id="min" placeholder="muhamad.azmi094: https://alightcreative.com/am/share/..."></textarea>
+<div class="note" id="dbg">Terisi otomatis dari backend. Bisa juga diisi manual.</div>
+</div>
+
+<div class="ph"><i></i><h2>Preset links</h2><span class="cnt" id="n">0</span></div>
+<div id="list"></div>
+</div>
+</main>
+
+<script>
+const $=id=>document.getElementById(id);
+const esc=s=>String(s).replace(/[<>&"]/g,c=>({'<':'&lt;','>':'&gt;','&':'&amp;','"':'&quot;'}[c]));
+const valid=u=>/^https?:\/\/((www|vt|vm|m)\.)?tiktok\.com\/.+/i.test(u);
+
+// Sambungkan backend di sini. Kembalikan:
+// {caption, account, views, likes, comments, commentList:[{user,text}]}
+async function fetchTikTok(url){
+  const r=await fetch('/api/find?url='+encodeURIComponent(url));
+  if(!r.ok) throw new Error('gagal');
+  return r.json();
+}
+
+const HOSTS=[[/alightcreative\.com|alight\.link/i,'SHARE'],[/drive\.google\.com|docs\.google\.com/i,'DRIVE'],[/mediafire\.com/i,'MEDIAFIRE'],[/mega\.nz/i,'MEGA'],[/t\.me\//i,'TELEGRAM'],[/pixeldrain\.com|gofile\.io|dropbox\.com|terabox\.com|sfile\.mobi/i,'FILE'],[/bit\.ly|s\.id|linktr\.ee|trakteer\.id|saweria\.co/i,'LINK']];
+const LINK=/(?:https?:\/\/)?(?:www\.)?(?:alightcreative\.com|alight\.link|drive\.google\.com|docs\.google\.com|mediafire\.com|mega\.nz|t\.me|bit\.ly|s\.id|linktr\.ee|pixeldrain\.com|gofile\.io|dropbox\.com|terabox\.com|sfile\.mobi|trakteer\.id|saweria\.co)\/?[^\s]*/gi;
+
+function findPresets(caption,list){
+  const cr=(caption.match(/CR\s*[:：]?\s*(@[\w.]+)/i)||[])[1]||'';
+  const out=[],seen=new Set();
+  list.concat([{user:'',text:caption}]).forEach(c=>{
+    [...new Set((c.text.match(LINK)||[]).concat(c.text.match(/https?:\/\/[^\s]+/gi)||[]))].forEach(u=>{
+      u=u.replace(/[.,)!]+$/,'');
+      if(!/^https?:\/\//i.test(u))u='https://'+u;
+      const h=HOSTS.find(([r])=>r.test(u))||(/tiktok\.com|tiktokcdn/i.test(u)?null:[0,'LINK']);
+      if(!h||seen.has(u))return;
+      seen.add(u);
+      const ratio=(c.text.match(/\b(9:16|16:9|1:1|4:5)\b/)||[])[1]||'9:16';
+      out.push({u,type:h[1],ratio,user:c.user,reply:c.reply,title:ratio+' '+(cr||c.user||'preset')});
+    });
+  });
+  return out;
+}
+
+function parseComments(t){
+  return t.split('\n').map(l=>l.trim()).filter(Boolean).map(l=>{
+    const m=l.match(/^@?([\w.]+)(\s*\(balasan\))?\s*:\s*(.*)$/);
+    return m?{user:'@'+m[1],reply:!!m[2],text:m[3]}:{user:'',text:l};
+  });
+}
+
+function render(){
+  const cap=$('cin').value;
+  $('cap').innerHTML=esc(cap).replace(/(#[\w.]+)/g,'<span class="h">$1</span>');
+  const items=findPresets(cap,parseComments($('min').value));
+  const me=$('acc').textContent;
+  items.sort((a,b)=>(b.user===me)-(a.user===me));
+  $('n').textContent=items.length;
+  $('list').innerHTML=items.length?items.map((p,i)=>`
+  <div class="pc"><div class="th">${esc(p.ratio)}</div><div class="pb">
+  <h3>${esc(p.title)}</h3><span class="bd">${p.type}</span>
+  ${p.user&&p.user===me?'<span class="bd g">BY THIS ACCOUNT</span>':''}
+  <div class="by">${esc(p.user)}${p.reply?' (balasan)':''}</div>
+  <div class="url">${esc(p.u)}</div>
+  <div class="acts"><a class="btn" href="${esc(p.u)}" target="_blank" rel="noopener noreferrer">Open preset</a>
+  <button class="btn s" data-i="${i}">Copy link</button></div></div></div>`).join('')
+  :'<div class="empty">Belum ada link preset. Tempel komentar yang berisi link Alight Motion, Google Drive, atau MediaFire.</div>';
+  $('list').querySelectorAll('button[data-i]').forEach(b=>b.onclick=async()=>{
+    const u=items[b.dataset.i].u;
+    try{await navigator.clipboard.writeText(u)}catch(_){const t=document.createElement('textarea');t.value=u;document.body.appendChild(t);t.select();try{document.execCommand('copy')}catch(__){}t.remove()}
+    b.textContent='Tersalin';setTimeout(()=>b.textContent='Copy link',1500);
+  });
+}
+
+function show(url,d){
+  $('res').hidden=false;$('chip').textContent=url;
+  $('acc').textContent=d.account||'-';$('com').textContent=d.comments??'-';
+  $('vw').textContent=d.views||'-';$('lk').textContent=d.likes||'-';
+  $('cin').value=d.caption||'';
+  $('min').value=(d.commentList||[]).map(c=>c.user+': '+c.text).join('\n');
+  const g=d.debug;
+  $('dbg').textContent=g?('Dibaca '+g.dibaca+' dari '+g.total+' komentar + '+g.balasan+' balasan.'+(g.error&&g.error.length?' Error: '+g.error.join('; '):'')):'Isi manual atau coba lagi.';
+  render();
+}
+
+function handle(ev,e){
+  if(ev.type==='info'){
+    $('acc').textContent=ev.account||'-';$('com').textContent=ev.comments??'-';
+    $('vw').textContent=ev.views||'-';$('lk').textContent=ev.likes||'-';
+    $('cin').value=ev.caption||'';render();
+  }else if(ev.type==='comments'){
+    const m=$('min');
+    m.value+=(m.value?'\n':'')+ev.list.map(c=>c.user+(c.reply?' (balasan)':'')+': '+c.text).join('\n');
+    $('dbg').textContent='Mencari ('+(ev.sumber||'')+')... '+ev.dibaca+' dari '+ev.total+' komentar, '+ev.balasan+' balasan';
+    render();
+  }else if(ev.type==='done'){
+    $('dbg').textContent='Selesai ('+(ev.sumber||'')+'). Dibaca '+ev.dibaca+' dari '+ev.total+' komentar + '+ev.balasan+' balasan.'+(ev.error&&ev.error.length?' Error: '+ev.error.join('; '):'');
+  }else if(ev.type==='error'){
+    e.textContent='Gagal mengambil data: '+ev.message+'. Isi caption dan komentar manual di bawah.';e.hidden=false;
+  }
+}
+
+async function search(){
+  const u=$('url').value.trim(),e=$('err');e.hidden=true;
+  if(!valid(u)){e.textContent='Link tidak valid. Tempel link dari TikTok, contoh: https://vt.tiktok.com/xxxx/';e.hidden=false;$('res').hidden=true;return}
+  const b=$('go');b.disabled=true;b.textContent='Mencari...';
+  show(u,{});$('dbg').textContent='Mengambil data...';
+  try{
+    const r=await fetch('/api/stream?url='+encodeURIComponent(u));
+    if(!r.ok||!r.body)throw new Error('gagal');
+    const rd=r.body.getReader(),dec=new TextDecoder();let buf='';
+    for(;;){
+      const {done,value}=await rd.read();if(done)break;
+      buf+=dec.decode(value,{stream:true});
+      let i;while((i=buf.indexOf('\n'))>=0){const line=buf.slice(0,i);buf=buf.slice(i+1);if(line.trim())handle(JSON.parse(line),e)}
+    }
+  }catch(_){e.textContent='Gagal terhubung ke backend. Isi caption dan komentar manual di bawah.';e.hidden=false}
+  b.disabled=false;b.textContent='Search';
+}
+$('go').onclick=search;
+$('url').addEventListener('keydown',e=>{if(e.key==='Enter')search()});
+$('clr').onclick=()=>{$('url').value='';$('res').hidden=true;$('url').focus()};
+$('cin').addEventListener('input',render);$('min').addEventListener('input',render);
+$('demo').onclick=()=>{
+  $('url').value='https://vt.tiktok.com/ZSbm1s1vT/';$('err').hidden=true;
+  show($('url').value,{account:'@masraysz_am',comments:364,views:'1.2 M',likes:'61.9 K',
+  caption:'.#masraysz_am || kece nih - .#jj .#presetalightmotion .#foryou .#gemsergemser CR:@weynpreset01',
+  commentList:[{user:'@muhamad.azmi094',text:'9:16 https://alightcreative.com/am/share/u/NSbRtZoZdlUQVheD9l5pn8ieMXu1/p/cg4FcpJ4Z3-b68e44ae85835df5'},
+  {user:'@muhamad.azmi094',text:'xml https://drive.google.com/file/d/1AbCdEfGhIjKlMnOp/view'}]});
+};
+</script>
+</body>
+</html>
