@@ -1,3 +1,4 @@
 {
-  "rewrites": [{ "source": "/", "destination": "/Finder.html" }]
+  "rewrites": [{ "source": "/", "destination": "/Finder.html" }],
+  "functions": { "api/stream.js": { "maxDuration": 60 } }
 }
